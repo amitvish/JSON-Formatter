@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON Formatter</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+  /* Custom styles */
+  .json-input {
+    min-height: 150px;
+  }
+  .json-output {
+    min-height: 150px;
+  }
+</style>
+</head>
+<body class="bg-gray-100 font-roboto">
+
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+    <div class="p-8">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-medium text-gray-800">JSON Formatter</h1>
+        <button id="formatBtn" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg">
+          Format
+        </button>
+      </div>
+      <div class="mb-4">
+        <p class="text-sm text-gray-600 mb-2">HOW TO USE: Paste a JSON snippet in the box and press the format button.</p>
+        <textarea id="jsonInput" class="json-input w-full p-4 text-sm border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Paste JSON here."></textarea>
+      </div>
+      <div class="mb-4">
+        <p class="text-sm text-gray-600 mb-2">Formatted JSON will appear here:</p>
+        <pre id="jsonOutput" class="json-output w-full p-4 text-sm bg-gray-100 border-2 border-gray-300 rounded-lg overflow-auto"></pre>
+      </div>
+    </div>
+    <div class="p-8 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+      <button id="clearBtn" class="text-sm font-medium text-gray-500 hover:text-gray-600">Clear</button>
+      <button id="copyBtn" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg">
+        Copy
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to format JSON
+  function formatJSON() {
+    const input = document.getElementById('jsonInput').value;
+    try {
+      const formatted = JSON.stringify(JSON.parse(input), null, 2);
+      document.getElementById('jsonOutput').textContent = formatted;
+    } catch (e) {
+      document.getElementById('jsonOutput').textContent = 'Invalid JSON: ' + e.message;
+    }
+  }
+
+  // Event listeners
+  document.getElementById('formatBtn').addEventListener('click', formatJSON);
+  document.getElementById('clearBtn').addEventListener('click', function() {
+    document.getElementById('jsonInput').value = '';
+    document.getElementById('jsonOutput').textContent = '';
+  });
+  document.getElementById('copyBtn').addEventListener('click', function() {
+    const output = document.getElementById('jsonOutput').textContent;
+    navigator.clipboard.writeText(output).then(function() {
+      alert('Copied to clipboard');
+    }, function(err) {
+      alert('Failed to copy text: ', err);
+    });
+  });
+</script>
+
+</body>
+</html>
